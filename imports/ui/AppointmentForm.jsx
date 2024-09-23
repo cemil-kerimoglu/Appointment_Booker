@@ -88,14 +88,10 @@ const AppointmentForm = ({ selectedAppointment, onSave, onCancel }) => {
       return;
     }
 
-    firstNameCapitalized =
-      firstName.charAt(0).toUpperCase() + firstName.slice(1);
-    lastNameCapitalized = lastName.charAt(0).toUpperCase() + lastName.slice(1);
-
     const appointmentData = {
       date,
-      firstName: firstNameCapitalized,
-      lastName: lastNameCapitalized,
+      firstName,
+      lastName,
       allDay,
     };
 
