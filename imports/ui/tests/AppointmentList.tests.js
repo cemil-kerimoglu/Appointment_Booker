@@ -73,39 +73,24 @@ describe("Appointment List", () => {
     expect(screen.getByText("11.10.2024")).toBeInTheDocument();
   });
 
-  test("search filters the appointments by name", () => {
-    // Define initial searchTerm and mock tracker data
-    let searchTerm = "";
-
-    // Mock useSubscribe to simulate a successful subscription
+  test("search filters the appointments by name", async () => {
     useSubscribe.mockReturnValue(true);
+    useTracker.mockReturnValueOnce(appointmentsMock);
+    useTracker.mockReturnValueOnce([appointmentsMock[1]]);
 
-    // Mock useTracker to return filtered results based on the searchTerm
-    useTracker.mockImplementation(() => {
-      const searchRegex = new RegExp(searchTerm, "i");
-      return appointmentsMock.filter(
-        (appointment) =>
-          searchRegex.test(appointment.firstName) ||
-          searchRegex.test(appointment.lastName)
-      );
-    });
+    render(<AppointmentList onEdit={onEdit} />);
 
-    // Render the component
-    renderComponent();
+    expect(screen.getByText("John")).toBeInTheDocument();
+    expect(screen.getByText("Jane")).toBeInTheDocument();
 
-    // Simulate typing "Jane" in the search input
     const searchInput = screen.getByPlaceholderText(/Search by name/i);
+
     fireEvent.change(searchInput, { target: { value: "Jane" } });
 
-    // Update searchTerm after the change event
-    searchTerm = "Jane";
-
-    // Rerender the component with the updated search term
-    fireEvent.change(searchInput, { target: { value: searchTerm } });
-
-    // Assert that "John" is not in the document and "Jane" is
-    expect(screen.queryByText("John")).not.toBeInTheDocument();
-    expect(screen.getByText("Jane")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText("John")).not.toBeInTheDocument();
+      expect(screen.getByText("Jane")).toBeInTheDocument();
+    });
   });
 
   test("initiates editing the appointment when Edit button is clicked", () => {
