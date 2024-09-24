@@ -8,3 +8,7 @@ For each of them 20 random appointments will be created, in each case 5 out of 2
 
 To run the server-side tests navigate to the root directory and do "meteor npm run test".
 To run client-side tests navigate to the root directory and do "meteor npm run clientTest -- imports/ui/tests".
+If you prefer to run client-side tests for each component individually you can do the following:
+"meteor npm run clientTest -- imports/ui/tests/AppointmentForm.tests.js"
+"meteor npm run clientTest -- imports/ui/tests/AppointmentList.tests.js"
+"meteor npm run clientTest -- imports/ui/tests/Login.tests.js"
