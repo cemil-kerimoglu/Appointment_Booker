@@ -73,8 +73,8 @@ const AppointmentList = ({ onEdit }) => {
   }
 
   return (
-    <div className="bg-white p-6 rounded shadow-md w-full h-full">
-      <h2 className="text-xl font-bold mb-4">Your Appointments</h2>
+    <div className="bg-white p-6 rounded shadow-md w-full h-full max-w-screen mx-auto">
+      <h2 className="text-2xl font-bold mb-4">Your Appointments</h2>
       <input
         type="text"
         placeholder="Search by name..."
@@ -87,49 +87,55 @@ const AppointmentList = ({ onEdit }) => {
       ) : appointments.length === 0 ? (
         <p className="text-gray-500">No appointments found.</p>
       ) : (
-        <table className="min-w-full table-auto">
-          <thead>
-            <tr>
-              <th className="px-4 py-2 border-b">Date</th>
-              <th className="px-4 py-2 border-b">All-Day</th>
-              <th className="px-4 py-2 border-b">First Name</th>
-              <th className="px-4 py-2 border-b">Last Name</th>
-              <th className="px-4 py-2 border-b">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {appointments.map((appointment) => (
-              <tr key={appointment._id} className="hover:bg-gray-100">
-                <td className="border-b px-4 py-2">
-                  {formatDate(appointment.date)}
-                </td>
-                <td className="border-b px-4 py-2 text-center">
-                  {appointment.allDay ? (
-                    <span className="text-green-500 font-semibold">Yes</span>
-                  ) : (
-                    <span className="text-gray-500">No</span>
-                  )}
-                </td>
-                <td className="border-b px-4 py-2">{appointment.firstName}</td>
-                <td className="border-b px-4 py-2">{appointment.lastName}</td>
-                <td className="border-b px-4 py-2">
-                  <button
-                    onClick={() => handleEdit(appointment)}
-                    className="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 transition duration-200 mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(appointment)}
-                    className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition duration-200"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 border-b text-center">Date</th>
+                <th className="px-4 py-2 border-b text-center">All-Day</th>
+                <th className="px-4 py-2 border-b text-left">First Name</th>
+                <th className="px-4 py-2 border-b text-left">Last Name</th>
+                <th className="px-4 py-2 border-b text-center">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {appointments.map((appointment) => (
+                <tr key={appointment._id} className="hover:bg-gray-100">
+                  <td className="border-b px-4 py-2 text-center">
+                    {formatDate(appointment.date)}
+                  </td>
+                  <td className="border-b px-4 py-2 text-center">
+                    {appointment.allDay ? (
+                      <span className="text-green-500 font-semibold">Yes</span>
+                    ) : (
+                      <span className="text-gray-500">No</span>
+                    )}
+                  </td>
+                  <td className="border-b px-4 py-2 text-left">
+                    {appointment.firstName}
+                  </td>
+                  <td className="border-b px-4 py-2 text-left">
+                    {appointment.lastName}
+                  </td>
+                  <td className="border-b px-4 py-2 text-center">
+                    <button
+                      onClick={() => handleEdit(appointment)}
+                      className="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 transition duration-200 mr-2"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(appointment)}
+                      className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition duration-200"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {/* Modal */}
