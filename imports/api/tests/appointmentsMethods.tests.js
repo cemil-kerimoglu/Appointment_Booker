@@ -69,6 +69,7 @@ if (Meteor.isServer) {
         firstName: "John",
         lastName: "Doe",
         allDay: false,
+        userId,
       });
 
       const context = { userId: otherUserId };
@@ -91,7 +92,33 @@ if (Meteor.isServer) {
       const appointment = await AppointmentsCollection.findOneAsync(
         appointmentId
       );
-      assert.isNotNull(appointment);
+      assert.exists(appointment);
+    });
+
+    it("allows a user to delete their own appointment", async function () {
+      const userId = Random.id();
+      const date = "2024-10-10";
+
+      const appointmentId = await AppointmentsCollection.insertAsync({
+        date,
+        firstName: "John",
+        lastName: "Doe",
+        allDay: false,
+        userId,
+      });
+
+      const context = { userId };
+
+      const appointmentsRemove =
+        Meteor.server.method_handlers["appointments.remove"];
+
+      await appointmentsRemove.apply(context, [appointmentId]);
+
+      // Ensure the appointment does not exist
+      const appointment = await AppointmentsCollection.findOneAsync(
+        appointmentId
+      );
+      assert.notExists(appointment);
     });
 
     it("does not allow a user to edit another user's appointment", async function () {
@@ -104,6 +131,7 @@ if (Meteor.isServer) {
         firstName: "John",
         lastName: "Doe",
         allDay: false,
+        userId,
       });
 
       const updateData = {
@@ -133,6 +161,39 @@ if (Meteor.isServer) {
         appointmentId
       );
       assert.equal(appointment.firstName, "John");
+    });
+
+    it("allows a user to edit their own appointment", async function () {
+      const userId = Random.id();
+      const date = "2024-10-10";
+
+      const appointmentId = await AppointmentsCollection.insertAsync({
+        date,
+        firstName: "John",
+        lastName: "Doe",
+        allDay: false,
+        userId,
+      });
+
+      const updateData = {
+        date,
+        firstName: "Jane",
+        lastName: "Doe",
+        allDay: false,
+      };
+
+      const context = { userId };
+
+      const appointmentsUpdate =
+        Meteor.server.method_handlers["appointments.update"];
+
+      await appointmentsUpdate.apply(context, [appointmentId, updateData]);
+
+      // Ensure the appointment was modified
+      const appointment = await AppointmentsCollection.findOneAsync(
+        appointmentId
+      );
+      assert.equal(appointment.firstName, "Jane");
     });
 
     it("prevents inserting an appointment on a date where there is an all-day appointment", async function () {
