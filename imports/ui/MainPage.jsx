@@ -47,9 +47,9 @@ const MainPage = () => {
           Logout
         </button>
       </header>
-      <main className="flex-grow p-4 flex flex-col md:flex-row">
+      <main className="flex-grow p-4 flex flex-col lg:flex-row">
         {/* Widget A */}
-        <div className="md:w-1/2 p-2">
+        <div className="lg:w-1/2 p-2">
           <AppointmentForm
             selectedAppointment={selectedAppointment}
             onSave={handleSave}
@@ -57,7 +57,7 @@ const MainPage = () => {
           />
         </div>
         {/* Widget B */}
-        <div className="md:w-1/2 p-2">
+        <div className="lg:w-1/2 p-2">
           <AppointmentList onEdit={handleEdit} />
         </div>
       </main>
